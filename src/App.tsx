@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Draggable, { DraggableCore, DraggableData, DraggableEvent, DraggableEventHandler } from 'react-draggable';
+import { DraggableCore, DraggableData, DraggableEvent, DraggableEventHandler } from 'react-draggable';
 import styled from 'styled-components';
 
 interface IDimension {
@@ -23,7 +23,6 @@ enum DIVIDER_SEGMENTS {
 }
 
 const DIVIDER_THICKNESS = 8;
-const HALF_DIVIDER_THICKNESS = DIVIDER_THICKNESS / 2;
 
 const App: React.FC = () => {
     const [isDragging, setIsDragging] = useState<DIVIDER_SEGMENTS | null>(null);
@@ -63,11 +62,11 @@ const App: React.FC = () => {
 
         switch (quadrant) {
             case QUADRANTS.UPPER_LEFT:
-                height = horizontalDividerPosition; // windowHeight / 2 + horizontalDividerPosition;
-                width = verticalDividerPosition; // windowWidth / 2 + verticalDividerPosition;
+                height = horizontalDividerPosition;
+                width = verticalDividerPosition;
                 break;
             case QUADRANTS.UPPER_RIGHT:
-                height = horizontalDividerPosition; // windowHeight / 2 + horizontalDividerPosition;
+                height = horizontalDividerPosition;
                 width = windowWidth - verticalDividerPosition;
                 break;
             case QUADRANTS.LOWER_RIGHT:
@@ -104,10 +103,6 @@ const App: React.FC = () => {
                         onDrag={onVerticalDividerDrag}
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.TOP)}
                         onStop={() => setIsDragging(null)}
-                        // position={
-                        //     isDragging === DIVIDER_SEGMENTS.TOP ? { x: verticalDividerPosition, y: 0 } : undefined
-                        // }
-                        // position={{ x: verticalDividerPosition, y: 0 }}
                     >
                         <VerticalDivider
                             style={{
@@ -127,7 +122,6 @@ const App: React.FC = () => {
                         onDrag={onHorizontalDividerDrag}
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.LEFT)}
                         onStop={() => setIsDragging(null)}
-                        // position={{ x: 0, y: horizontalDividerPosition }}
                     >
                         <HorizontalDivider style={{ width: `${upperLeftDimensions.width}px` }} />
                     </DraggableCore>
@@ -135,7 +129,6 @@ const App: React.FC = () => {
                         onDrag={onMultiDrag}
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.CENTER)}
                         onStop={() => setIsDragging(null)}
-                        // position={{ x: verticalDividerPosition, y: horizontalDividerPosition }}
                     >
                         <CenterHandle />
                     </DraggableCore>
@@ -143,7 +136,6 @@ const App: React.FC = () => {
                         onDrag={onHorizontalDividerDrag}
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.RIGHT)}
                         onStop={() => setIsDragging(null)}
-                        // position={{ x: 0, y: horizontalDividerPosition }}
                     >
                         <HorizontalDivider style={{ width: `${lowerLeftDimensions.width}px` }} />
                     </DraggableCore>
@@ -156,7 +148,6 @@ const App: React.FC = () => {
                         onDrag={onVerticalDividerDrag}
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.BOTTOM)}
                         onStop={() => setIsDragging(null)}
-                        // position={{ x: verticalDividerPosition, y: 0 }}
                     >
                         <VerticalDivider style={{ height: `${lowerLeftDimensions.height}px` }} />
                     </DraggableCore>

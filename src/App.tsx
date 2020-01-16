@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, isValidElement } from 'react';
 import Draggable, { DraggableData, DraggableEvent, DraggableEventHandler } from 'react-draggable';
-import styled from 'styled-components';
+import styled, { ThemedStyledFunction, StyledComponentBase } from 'styled-components';
 
 interface IDimension {
-    height?: number;
+    height?: number; // todo not optional
     width?: number;
 }
 
@@ -13,6 +13,9 @@ enum QUADRANTS {
     LOWER_LEFT,
     LOWER_RIGHT,
 }
+
+const DIVIDER_THICKNESS = 8;
+const HALF_DIVIDER_THICKNESS = DIVIDER_THICKNESS / 2;
 
 const App: React.FC = () => {
     const [horizontalDividerPosition, setHorizontalDividerPosition] = useState(0);
@@ -46,32 +49,24 @@ const App: React.FC = () => {
     }, []);
 
     const getViewportDimensions = (quadrant: QUADRANTS): IDimension => {
-        // const height = (windowHeight + horizontalDividerPosition) / 2 - 4;
-        // const width = (windowWidth + verticalDividerPosition) / 2 - 4;
-
-        // return {
-        //     height,
-        //     width,
-        // };
-
         let height, width;
 
         switch (quadrant) {
             case QUADRANTS.UPPER_LEFT:
-                height = windowHeight / 2 + horizontalDividerPosition - 4;
-                width = windowWidth / 2 + verticalDividerPosition - 4;
+                height = windowHeight / 2 + horizontalDividerPosition;
+                width = windowWidth / 2 + verticalDividerPosition;
                 break;
             case QUADRANTS.UPPER_RIGHT:
-                height = windowHeight / 2 + horizontalDividerPosition - 4;
-                width = windowWidth / 2 - verticalDividerPosition - 4;
+                height = windowHeight / 2 + horizontalDividerPosition;
+                width = windowWidth / 2 - verticalDividerPosition;
                 break;
             case QUADRANTS.LOWER_LEFT:
-                height = windowHeight / 2 - horizontalDividerPosition - 4;
-                width = windowWidth / 2 + verticalDividerPosition - 4;
+                height = windowHeight / 2 - horizontalDividerPosition;
+                width = windowWidth / 2 + verticalDividerPosition;
                 break;
             case QUADRANTS.LOWER_RIGHT:
-                height = windowHeight / 2 - horizontalDividerPosition - 4;
-                width = windowWidth / 2 - verticalDividerPosition - 4;
+                height = windowHeight / 2 - horizontalDividerPosition;
+                width = windowWidth / 2 - verticalDividerPosition;
                 break;
         }
 
@@ -80,6 +75,8 @@ const App: React.FC = () => {
             width,
         };
     };
+
+    const updateViewportDimensions = () => {};
 
     const upperLeftDimensions = getViewportDimensions(QUADRANTS.UPPER_LEFT);
     const upperRightDimensions = getViewportDimensions(QUADRANTS.UPPER_RIGHT);
@@ -90,11 +87,18 @@ const App: React.FC = () => {
         <Container height={windowHeight} width={windowWidth}>
             <Column>
                 <Row>
-                    <Viewport height={upperLeftDimensions.height} width={upperLeftDimensions.width} />
+                    <Viewport
+                        style={{ height: `${upperLeftDimensions.height}px`, width: `${upperLeftDimensions.width}px` }}
+                    />
                     <Draggable axis="x" onDrag={onVerticalDividerDrag} position={{ x: verticalDividerPosition, y: 0 }}>
-                        <VerticalDivider height={upperLeftDimensions.height} />
+                        <VerticalDivider style={{ height: upperLeftDimensions.height }} />
                     </Draggable>
-                    <Viewport height={upperRightDimensions.height} width={upperRightDimensions.width} />
+                    <Viewport
+                        style={{
+                            height: `${upperRightDimensions.height}px`,
+                            width: `${upperRightDimensions.width}px`,
+                        }}
+                    />
                 </Row>
                 <Row>
                     <Draggable
@@ -102,7 +106,7 @@ const App: React.FC = () => {
                         onDrag={onHorizontalDividerDrag}
                         position={{ x: 0, y: horizontalDividerPosition }}
                     >
-                        <HorizontalDivider width={upperLeftDimensions.width} />
+                        <HorizontalDivider style={{ width: upperLeftDimensions.width }} />
                     </Draggable>
                     <Draggable
                         onDrag={onMultiDrag}
@@ -115,15 +119,19 @@ const App: React.FC = () => {
                         onDrag={onHorizontalDividerDrag}
                         position={{ x: 0, y: horizontalDividerPosition }}
                     >
-                        <HorizontalDivider width={upperRightDimensions.width} />
+                        <HorizontalDivider style={{ width: lowerLeftDimensions.width }} />
                     </Draggable>
                 </Row>
                 <Row>
-                    <Viewport height={lowerLeftDimensions.height} width={lowerLeftDimensions.width} />
+                    <Viewport
+                        style={{ height: `${lowerLeftDimensions.height}px`, width: `${lowerLeftDimensions.width}px` }}
+                    />
                     <Draggable axis="x" onDrag={onVerticalDividerDrag} position={{ x: verticalDividerPosition, y: 0 }}>
-                        <VerticalDivider height={lowerLeftDimensions.height} />
+                        <VerticalDivider style={{ height: lowerLeftDimensions.height }} />
                     </Draggable>
-                    <Viewport height={lowerRightDimensions.height} width={lowerRightDimensions.width} />
+                    <Viewport
+                        style={{ height: `${lowerRightDimensions.height}px`, width: `${lowerRightDimensions.width}px` }}
+                    />
                 </Row>
             </Column>
             >
@@ -131,45 +139,36 @@ const App: React.FC = () => {
     );
 };
 
-interface IContainerProps {
-    height: number;
-    width: number;
-}
-
 const Container = styled.div<IDimension>`
     background-color: black;
-    height: ${props => props.height}px;
-    width: ${props => props.width}px;
     overflow: hidden;
 `;
 
 const Viewport = styled.div<IDimension>`
     background-color: darkgrey;
-    height: ${props => props.height}px;
-    width: ${props => props.width}px;
 `;
 
 const HorizontalDivider = styled.div<IDimension>`
     background-color: white;
     cursor: ns-resize;
-    height: 8px;
-    width: ${props => props.width}px;
+    height: ${DIVIDER_THICKNESS}px;
+    /* width: ${props => props.width}px; */
     z-index: 1000;
 `;
 
 const VerticalDivider = styled.div<IDimension>`
     background-color: white;
     cursor: ew-resize;
-    height: ${props => props.height}px;
-    width: 8px;
+    /* height: ${props => props.height}px; */
+    width: ${DIVIDER_THICKNESS}px;
     z-index: 1000;
 `;
 
 const CenterHandle = styled.div`
     background-color: white;
     cursor: move;
-    height: 8px;
-    width: 8px;
+    height: ${DIVIDER_THICKNESS}px;
+    width: ${DIVIDER_THICKNESS}px;
     z-index: 1001;
 `;
 

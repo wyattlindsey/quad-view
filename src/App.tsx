@@ -58,20 +58,20 @@ const App: React.FC = () => {
 
         switch (quadrant) {
             case QUADRANTS.UPPER_LEFT:
-                height = windowHeight / 2 + horizontalDividerPosition;
-                width = windowWidth / 2 + verticalDividerPosition;
+                height = windowHeight / 2 + horizontalDividerPosition - 4;
+                width = windowWidth / 2 + verticalDividerPosition - 4;
                 break;
             case QUADRANTS.UPPER_RIGHT:
-                height = windowHeight / 2 + horizontalDividerPosition;
-                width = windowWidth / 2 - verticalDividerPosition;
+                height = windowHeight / 2 + horizontalDividerPosition - 4;
+                width = windowWidth / 2 - verticalDividerPosition - 4;
                 break;
             case QUADRANTS.LOWER_LEFT:
-                height = windowHeight / 2 - horizontalDividerPosition;
-                width = windowWidth / 2 + verticalDividerPosition;
+                height = windowHeight / 2 - horizontalDividerPosition - 4;
+                width = windowWidth / 2 + verticalDividerPosition - 4;
                 break;
             case QUADRANTS.LOWER_RIGHT:
-                height = windowHeight / 2 - horizontalDividerPosition;
-                width = windowWidth / 2 - verticalDividerPosition;
+                height = windowHeight / 2 - horizontalDividerPosition - 4;
+                width = windowWidth / 2 - verticalDividerPosition - 4;
                 break;
         }
 

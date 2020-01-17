@@ -21,23 +21,29 @@ const HALF_DIVIDER_THICKNESS = DIVIDER_THICKNESS / 2;
 const App: React.FC = () => {
     const [windowHeight, setWindowHeight] = useState(window.innerHeight);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    const [horizontalDividerPosition, setHorizontalDividerPosition] = useState(window.innerHeight / 2);
-    const [verticalDividerPosition, setVerticalDividerPosition] = useState(window.innerWidth / 2);
+    const [horizontalDividerPosition, setHorizontalDividerPosition] = useState(windowHeight / 2);
+    const [verticalDividerPosition, setVerticalDividerPosition] = useState(windowWidth / 2);
+    const [verticalViewportRatio, setVerticalViewportRatio] = useState(0.5);
+    const [hotizontalViewportRatio, setHorizontalViewportRatio] = useState(0.5);
 
     const onHorizontalDividerDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
         e.stopPropagation();
         setHorizontalDividerPosition(data.y);
+        setVerticalViewportRatio(data.y / windowHeight);
     };
 
     const onVerticalDividerDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
         e.stopPropagation();
         setVerticalDividerPosition(data.x);
+        setHorizontalViewportRatio(data.x / windowWidth);
     };
 
     const onMultiDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
         e.stopPropagation();
         setHorizontalDividerPosition(data.y);
         setVerticalDividerPosition(data.x);
+        setVerticalViewportRatio(data.y / windowHeight);
+        setHorizontalViewportRatio(data.x / windowWidth);
     };
 
     const handleResize = () => {
@@ -45,8 +51,8 @@ const App: React.FC = () => {
         const newWindowWidth = window.innerWidth;
         const deltaY = newWindowHeight - windowHeight;
         const deltaX = newWindowWidth - windowWidth;
-        const horizontalDividerOffset = deltaY;
-        const verticalDividerOffset = deltaX;
+        const horizontalDividerOffset = deltaY * verticalViewportRatio;
+        const verticalDividerOffset = deltaX * hotizontalViewportRatio;
 
         setWindowHeight(window.innerHeight);
         setWindowWidth(window.innerWidth);
@@ -60,7 +66,7 @@ const App: React.FC = () => {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, []);
+    });
 
     const getViewportDimensions = (quadrant: QUADRANTS): IDimension => {
         let height, width;
@@ -89,8 +95,6 @@ const App: React.FC = () => {
             width: width - HALF_DIVIDER_THICKNESS,
         };
     };
-
-    const updateViewportDimensions = () => {};
 
     const upperLeftDimensions = getViewportDimensions(QUADRANTS.UPPER_LEFT);
     const upperRightDimensions = getViewportDimensions(QUADRANTS.UPPER_RIGHT);

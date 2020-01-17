@@ -102,7 +102,7 @@ const App: React.FC = () => {
                     <Viewport
                         style={{ height: `${upperLeftDimensions.height}px`, width: `${upperLeftDimensions.width}px` }}
                     >
-                        <LogoImage src={logo} />
+                        <LogoImage draggable={false} src={logo} />
                     </Viewport>
                     <DraggableCore
                         onDrag={onVerticalDividerDrag}
@@ -121,7 +121,7 @@ const App: React.FC = () => {
                             width: `${upperRightDimensions.width}px`,
                         }}
                     >
-                        <LogoImage src={logo} />
+                        <LogoImage draggable={false} src={logo} />
                     </Viewport>
                 </Row>
                 <Row>
@@ -144,14 +144,14 @@ const App: React.FC = () => {
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.RIGHT)}
                         onStop={() => setIsDragging(null)}
                     >
-                        <HorizontalDivider style={{ width: `${lowerLeftDimensions.width}px` }} />
+                        <HorizontalDivider style={{ width: `${lowerRightDimensions.width}px` }} />
                     </DraggableCore>
                 </Row>
                 <Row>
                     <Viewport
                         style={{ height: `${lowerLeftDimensions.height}px`, width: `${lowerLeftDimensions.width}px` }}
                     >
-                        <LogoImage src={logo} />
+                        <LogoImage draggable={false} src={logo} />
                     </Viewport>
                     <DraggableCore
                         onDrag={onVerticalDividerDrag}
@@ -163,7 +163,7 @@ const App: React.FC = () => {
                     <Viewport
                         style={{ height: `${lowerRightDimensions.height}px`, width: `${lowerRightDimensions.width}px` }}
                     >
-                        <LogoImage src={logo} />
+                        <LogoImage draggable={false} src={logo} />
                     </Viewport>
                 </Row>
             </Column>

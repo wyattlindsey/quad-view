@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DraggableCore, DraggableData, DraggableEvent, DraggableEventHandler } from 'react-draggable';
 import styled from 'styled-components';
+import logo from './logo.svg';
 
 interface IDimension {
     height?: number; // todo not optional
@@ -31,16 +32,18 @@ const App: React.FC = () => {
     const [horizontalDividerPosition, setHorizontalDividerPosition] = useState(windowHeight / 2);
     const [verticalDividerPosition, setVerticalDividerPosition] = useState(windowWidth / 2);
 
-    const onHorizontalDividerDrag: DraggableEventHandler = (_: DraggableEvent, data: DraggableData) => {
+    const onHorizontalDividerDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
+        e.stopPropagation();
         setHorizontalDividerPosition(data.y);
     };
 
-    const onVerticalDividerDrag: DraggableEventHandler = (_: DraggableEvent, data: DraggableData) => {
-        console.log('data: ', data);
+    const onVerticalDividerDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
+        e.stopPropagation();
         setVerticalDividerPosition(data.x);
     };
 
-    const onMultiDrag: DraggableEventHandler = (_: DraggableEvent, data: DraggableData) => {
+    const onMultiDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
+        e.stopPropagation();
         setHorizontalDividerPosition(data.y);
         setVerticalDividerPosition(data.x);
     };
@@ -98,7 +101,9 @@ const App: React.FC = () => {
                 <Row>
                     <Viewport
                         style={{ height: `${upperLeftDimensions.height}px`, width: `${upperLeftDimensions.width}px` }}
-                    />
+                    >
+                        <LogoImage src={logo} />
+                    </Viewport>
                     <DraggableCore
                         onDrag={onVerticalDividerDrag}
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.TOP)}
@@ -115,7 +120,9 @@ const App: React.FC = () => {
                             height: `${upperRightDimensions.height}px`,
                             width: `${upperRightDimensions.width}px`,
                         }}
-                    />
+                    >
+                        <LogoImage src={logo} />
+                    </Viewport>
                 </Row>
                 <Row>
                     <DraggableCore
@@ -143,7 +150,9 @@ const App: React.FC = () => {
                 <Row>
                     <Viewport
                         style={{ height: `${lowerLeftDimensions.height}px`, width: `${lowerLeftDimensions.width}px` }}
-                    />
+                    >
+                        <LogoImage src={logo} />
+                    </Viewport>
                     <DraggableCore
                         onDrag={onVerticalDividerDrag}
                         onMouseDown={() => setIsDragging(DIVIDER_SEGMENTS.BOTTOM)}
@@ -153,7 +162,9 @@ const App: React.FC = () => {
                     </DraggableCore>
                     <Viewport
                         style={{ height: `${lowerRightDimensions.height}px`, width: `${lowerRightDimensions.width}px` }}
-                    />
+                    >
+                        <LogoImage src={logo} />
+                    </Viewport>
                 </Row>
             </Column>
             >
@@ -167,7 +178,12 @@ const Container = styled.div<IDimension>`
 `;
 
 const Viewport = styled.div<IDimension>`
-    background-color: darkgrey;
+    background-color: rgb(60, 60, 60);
+`;
+
+const LogoImage = styled.img`
+    max-height: 100%;
+    max-width: 100%;
 `;
 
 const HorizontalDivider = styled.div<IDimension>`

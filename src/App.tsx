@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import logo from './logo.svg';
 
 interface IDimension {
-    height?: number; // todo not optional
+    height?: number;
     width?: number;
 }
 
@@ -15,7 +15,7 @@ enum QUADRANTS {
     LOWER_RIGHT,
 }
 
-const DIVIDER_THICKNESS = 8;
+const DIVIDER_THICKNESS = 6;
 const HALF_DIVIDER_THICKNESS = DIVIDER_THICKNESS / 2;
 
 const App: React.FC = () => {
@@ -177,23 +177,34 @@ const LogoImage = styled.img`
     max-width: 100%;
 `;
 
-const HorizontalDivider = styled.div`
-    background-color: white;
+const Divider = styled.div`
+    background-color: rgb(160, 160, 160);
+    border-color: rgb(100, 100, 100);
+    border-style: solid;
+    border-width: 1px;
+    box-sizing: border-box;
+    z-index: 1000;
+`;
+
+const HorizontalDivider = styled(Divider)`
+    border-left: hidden;
+    border-right: hidden;
     cursor: ns-resize;
     height: ${DIVIDER_THICKNESS}px;
     z-index: 1000;
 `;
 
-const VerticalDivider = styled.div`
-    background-color: white;
+const VerticalDivider = styled(Divider)`
+    border-top: hidden;
+    border-bottom: hidden;
     cursor: ew-resize;
     width: ${DIVIDER_THICKNESS}px;
     z-index: 1000;
 `;
 
-const CenterHandle = styled.div`
-    background-color: white;
+const CenterHandle = styled(Divider)`
     cursor: move;
+    border: hidden;
     height: ${DIVIDER_THICKNESS}px;
     width: ${DIVIDER_THICKNESS}px;
     z-index: 1001;

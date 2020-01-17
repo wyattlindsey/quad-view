@@ -28,20 +28,20 @@ const App: React.FC = () => {
 
     const onHorizontalDividerDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
         e.stopPropagation();
-        setHorizontalDividerPosition(data.y);
+        setHorizontalDividerPosition(Math.min(data.y, windowHeight - DIVIDER_THICKNESS));
         setVerticalViewportRatio(data.y / windowHeight);
     };
 
     const onVerticalDividerDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
         e.stopPropagation();
-        setVerticalDividerPosition(data.x);
+        setVerticalDividerPosition(Math.min(data.x, windowWidth - DIVIDER_THICKNESS));
         setHorizontalViewportRatio(data.x / windowWidth);
     };
 
     const onMultiDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
         e.stopPropagation();
-        setHorizontalDividerPosition(data.y);
-        setVerticalDividerPosition(data.x);
+        setHorizontalDividerPosition(Math.min(data.y, windowHeight - DIVIDER_THICKNESS));
+        setVerticalDividerPosition(Math.min(data.x, windowWidth - DIVIDER_THICKNESS));
         setVerticalViewportRatio(data.y / windowHeight);
         setHorizontalViewportRatio(data.x / windowWidth);
     };
